@@ -6,6 +6,8 @@ import numpy as np
 ##UI
 #have input for the grating size
 
+#look back on for kernal / morphing ideas
+
 #based on grating size, estimate where the border should be using edges or sides of contour
 #then draw a box there
 

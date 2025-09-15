@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 
+
+#manual fit/ not Ideal
+
 #LOAD IMAGE  ----->  this will change to live feed from camera
 img = cv2.imread("Contour 3.png") 
 

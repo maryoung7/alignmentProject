@@ -7,7 +7,7 @@ import numpy as np
 #No perspective correction
 #WORKING FOR CONTOUR 4 DO NOT CHANGE
 
-
+#Could probably edit to make better if colors are clearer in the image
 
 image_path = os.path.join('Contour 4png.png')  #specify your image path here
 img = cv2.imread(image_path) #cv2.imread reads the image

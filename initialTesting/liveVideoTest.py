@@ -1,4 +1,6 @@
 
+
+#Just testing video/ no processing
 #computerVision for a webcam/live video
 import cv2
 from PIL import Image
