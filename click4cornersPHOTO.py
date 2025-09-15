@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+#best so far
 IMG_PATH = "Contour 8.png"   # <- set this
 
 points = []
