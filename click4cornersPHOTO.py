@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 #best so far
+# git commit -m "message"
+# git push
+
 IMG_PATH = "Contour 8.png"   # <- set this
 
 points = []
