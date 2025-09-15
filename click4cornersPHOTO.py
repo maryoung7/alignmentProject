@@ -1,16 +1,24 @@
 import cv2
 import numpy as np
 #best so far
+
+#how to update git repo:
+# git add .
 # git commit -m "message"
-# git push
+
+# When done, git push
 
 IMG_PATH = "Contour 8.png"   # <- set this
-
+sx = sy = 0.3
 points = []
 orig = cv2.imread(IMG_PATH)
-orig = cv2.resize(orig, (0,0), fx=0.3, fy=0.3)
+orig = cv2.resize(orig, (0,0), fx=sx, fy=sy)
 if orig is None:
     raise SystemExit(f"Could not read image at {IMG_PATH}")
+
+# Calibrate camera if needed
+# https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html
+
 
 def order_points(pts):
     """Return points as [top-left, top-right, bottom-right, bottom-left]."""
