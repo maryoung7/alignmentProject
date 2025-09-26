@@ -8,7 +8,8 @@ import numpy as np
 
 # When done, git push
 
-IMG_PATH = "Contour 8.png"   # <- set this
+#IMG_PATH = "Contour 4.png"   # <- set this
+IMG_PATH = "img1.png"   # <- set this
 sx = sy = 0.3
 points = []
 orig = cv2.imread(IMG_PATH)

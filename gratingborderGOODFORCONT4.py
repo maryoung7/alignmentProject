@@ -11,6 +11,7 @@ import numpy as np
 
 #Part 1 : inital processing -----------------------------------------------------------------
 image_path = os.path.join('Contour 4png.png')  #specify your image path here
+
 img = cv2.imread(image_path) #cv2.imread reads the image
 
 resized = cv2.resize(img, (640, 480))   #.resize to make image smaller
