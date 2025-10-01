@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 import itertools
+
+#only getting vertical lines,
+
 # =========================
 # Config
 # =========================
@@ -9,11 +12,15 @@ CLAHE_CLIP = 2.5
 KEEP_LEN_FRAC = 0.03
 KMEANS_ANGLE_SEP_DEG = 25
 MERGE_PARALLEL_DIST_PX = 8.0
+PAD = 80   # fixed padding around the image
+BORDER_BG = (32, 32, 32)  # used if you choose CONSTANT border
 
 # =========================
 # Preprocessing
 # =========================
+
 def preprocess_image(img_bgr_or_gray, resize_to=RESIZE_TO):
+
     if img_bgr_or_gray.ndim == 2:
         gray = img_bgr_or_gray
         bgr  = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
@@ -24,10 +31,10 @@ def preprocess_image(img_bgr_or_gray, resize_to=RESIZE_TO):
     if resize_to is not None:
         bgr  = cv2.resize(bgr, resize_to)
         gray = cv2.resize(gray, resize_to)
-
+  
     clahe = cv2.createCLAHE(clipLimit=CLAHE_CLIP, tileGridSize=(8,8))
     enhanced = clahe.apply(gray)
-
+    cv2.imshow("enhanced",enhanced)
     gx = cv2.Scharr(enhanced, cv2.CV_32F, 1, 0)
     gy = cv2.Scharr(enhanced, cv2.CV_32F, 0, 1)
     mag = cv2.magnitude(gx, gy)
@@ -145,9 +152,14 @@ def warp_from_corners(img, corners):
 if __name__ == "__main__":
     img = cv2.imread("img 3.png")
     img = cv2.resize(img, (640, 480))
+   
     if img is None:
         raise SystemExit("Could not read image")
-
+    work = cv2.copyMakeBorder(
+        img, PAD, PAD, PAD, PAD,
+        borderType=cv2.BORDER_CONSTANT # or cv2.BORDER_CONSTANT
+        , value=BORDER_BG                # only needed for BORDER_CONSTANT
+    )
     bgr, enhanced, edges = preprocess_image(img)
 
     segs, overlay = detect_lines(enhanced, edges, use_edges=False)

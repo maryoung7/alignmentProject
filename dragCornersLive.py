@@ -1,12 +1,16 @@
 import cv2
 import numpy as np
 
+#Good for testing for live video
+
+#add bright spot detection after for testing
+
 # --- config ---
-CAM_INDEX = 0          # your webcam index
-sx = sy = 0.5          # preview scale for speed; set to 1.0 for full res
-HANDLE_R = 10
-PICK_R2 = 15**2
-PAD = 200              # fixed padding (workspace border)
+CAM_INDEX = 0          # try changing if multiple cameras
+sx = sy = 0.5          # scale of video
+HANDLE_R = 10          # radius of corner circles
+PICK_R2 = 15**2        # pick radius squared(how close mouse must be to grab)
+PAD = 100              # fixed padding (workspace border)
 
 # --- state (filled after first frame arrives) ---
 points = []            # 4 pts in canvas coords
