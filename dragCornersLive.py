@@ -2,11 +2,105 @@ import cv2
 import numpy as np
 
 #Good for testing for live video
-
+#how to update git repo:
+# git add .
+# git commit -m 'message'
+# When done, git push
 #add bright spot detection after for testing
+# ---------- Simple OpenCV Camera Picker (no trackbar) ----------
+def _open_cap(idx):
+    """Try default backend; if it fails, try CAP_DSHOW (often needed on Windows)."""
+    cap = cv2.VideoCapture(idx)
+    if cap is not None and cap.isOpened():
+        return cap
+    if cap is not None:
+        cap.release()
+    cap = cv2.VideoCapture(idx, cv2.CAP_DSHOW)
+    if cap is not None and cap.isOpened():
+        return cap
+    if cap is not None:
+        cap.release()
+    return None
+
+def select_camera_cv2(max_index=10, preview_scale=0.6, initial=0):
+    """
+    Open a window that previews the current index.
+    Controls:
+      ← / → : change camera index
+      Enter / Space : select current index
+      q / Esc : cancel (returns None)
+    """
+    win = "Select Camera"
+    cv2.namedWindow(win)
+    cur = int(max(0, min(max_index, initial)))
+    cap = None
+
+    def _release():
+        nonlocal cap
+        if cap is not None:
+            cap.release()
+            cap = None
+
+    while True:
+        if cap is None:
+            cap = _open_cap(cur)
+
+        ok, frame = (False, None)
+        if cap is not None:
+            ok, frame = cap.read()
+
+        if not ok or frame is None:
+            # Show error canvas
+            frame = np.full((360, 640, 3), 30, np.uint8)
+            cv2.putText(frame, f"Camera {cur} not available",
+                        (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2, cv2.LINE_AA)
+        else:
+            if preview_scale != 1.0:
+                frame = cv2.resize(frame, (0, 0), fx=preview_scale, fy=preview_scale)
+
+        # UI overlay
+        h, w = frame.shape[:2]
+        help1 = f"[{cur}]  ←/→ change   Enter/Space select   q/Esc cancel"
+        cv2.putText(frame, "Camera Picker", (16, 36), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2, cv2.LINE_AA)
+        cv2.putText(frame, help1, (16, h - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (230,230,230), 2, cv2.LINE_AA)
+
+        cv2.imshow(win, frame)
+        k = cv2.waitKey(1) & 0xFF
+
+        if k in (13, 32):  # Enter or Space
+            _release()
+            cv2.destroyWindow(win)
+            return cur
+        if k in (ord('q'), 27):  # q or Esc
+            _release()
+            cv2.destroyWindow(win)
+            return None
+        if k == 81:  # Left arrow
+            new = max(0, cur - 1)
+            if new != cur:
+                cur = new
+                _release()
+        if k == 83:  # Right arrow
+            new = min(max_index, cur + 1)
+            if new != cur:
+                cur = new
+                _release()
 
 # --- config ---
-CAM_INDEX = 0          # try changing if multiple cameras
+#CAM_INDEX = 0          # try changing if multiple cameras
+# --- camera selection UI ---
+cam_idx = select_camera_cv2(max_index=10, preview_scale=0.6, initial=0)
+if cam_idx is None:
+    print("No camera selected. Exiting.")
+    raise SystemExit(0)
+
+cap = cv2.VideoCapture(cam_idx)
+if not cap.isOpened():
+    cap.release()
+    cap = cv2.VideoCapture(cam_idx, cv2.CAP_DSHOW)  # Windows fallback
+    if not cap.isOpened():
+        raise SystemExit(f"Could not open camera {cam_idx}")
+
 sx = sy = 0.5          # scale of video
 HANDLE_R = 10          # radius of corner circles
 PICK_R2 = 15**2        # pick radius squared(how close mouse must be to grab)
@@ -103,7 +197,7 @@ def on_mouse(event, x, y, flags, param):
         drag_idx = None
 
 # --- video setup ---
-cap = cv2.VideoCapture(CAM_INDEX)
+#cap = cv2.VideoCapture(CAM_INDEX)
 # (Optional) on Windows, try: cap = cv2.VideoCapture(CAM_INDEX, cv2.CAP_DSHOW)
 
 cv2.namedWindow("Video")
