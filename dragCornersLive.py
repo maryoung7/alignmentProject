@@ -60,9 +60,9 @@ def select_camera_cv2(max_index=10, preview_scale=0.6, initial=0):
 
         # UI overlay
         h, w = frame.shape[:2]
-        help1 = f"[{cur}]  ←/→ change   Enter/Space select   q/Esc cancel"
-        cv2.putText(frame, "Camera Picker", (16, 36), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,0), 2, cv2.LINE_AA)
-        cv2.putText(frame, help1, (16, h - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (230,230,230), 2, cv2.LINE_AA)
+        help1 = f"[{cur}]  <-/-> change   Enter/Space select   q/Esc exit"
+        cv2.putText(frame, "Camera Picker", (16, 36), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1, cv2.LINE_AA)
+        cv2.putText(frame, help1, (16, h - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (230,230,230), 1, cv2.LINE_AA)
 
         cv2.imshow(win, frame)
         k = cv2.waitKey(1) & 0xFF
@@ -133,7 +133,7 @@ def draw_preview(img, pts):
             cv2.putText(vis, str(i), (p[0]+8, p[1]-8),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2, cv2.LINE_AA)
     cv2.putText(vis, "Drag 4 red handles. 'r' reset, 'q' quit.",
-                (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (230,230,230), 2, cv2.LINE_AA)
+                (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (230,230,230), 1, cv2.LINE_AA)
     return vis
 
 def warp_from_points(src_img, pts):
