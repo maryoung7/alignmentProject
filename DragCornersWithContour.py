@@ -3,7 +3,9 @@
 ## accept input for grating corners
 ## calibration?
 ## perform warp
-
+# git add .
+# git commit -m "message"
+# When done, git push
 # --- Imports & constants --- #
 
 import numpy as np
